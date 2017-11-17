@@ -312,11 +312,16 @@ Use the Agave CLI's `files-get` or a GET command to download the Singularity ima
 **agave-cli**
 ```
 $ files-get -S data-tacc-work-jturcino /projects/docker/sd2e/jturcino_docker-whale_latest-2016-12-15-f73a5ba436eb.img
+Downloading /projects/docker/sd2e/jturcino_docker-whale_latest-2016-12-15-f73a5ba436eb.img ...
 ######################################################################## 100.0%
+$ ls
+jturcino_docker-whale_latest-2016-12-15-f73a5ba436eb.img
 ```
 **cURL**
 ```
 curl -k -H "Authorization: Bearer $TOKEN" -O https://api.sd2e.org/files/v2/media/system/data-tacc-work-jturcino//projects/docker/sd2e/jturcino_docker-whale_latest-2016-12-15-f73a5ba436eb.img
 Downloading /projects/docker/sd2e/jturcino_docker-whale_latest-2016-12-15-f73a5ba436eb.img ...
 ######################################################################## 100.0%
+$ ls
+jturcino_docker-whale_latest-2016-12-15-f73a5ba436eb.img
 ```
