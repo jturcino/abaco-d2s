@@ -1,6 +1,6 @@
 # abaco-d2s
 
-A repo for [this Docker container](https://hub.docker.com/r/jturcino/abaco-d2s/) that runs [docker2singularity](https://github.com/TACC/docker2singularity) with [Abaco](https://github.com/TACC/abaco)
+A [container](https://hub.docker.com/r/jturcino/abaco-d2s/) for registrating a [docker2singularity](https://github.com/TACC/docker2singularity) actor with [Abaco](https://github.com/TACC/abaco)
 
 ## Overview
 
