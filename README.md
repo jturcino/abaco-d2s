@@ -16,20 +16,22 @@ You can use cURL commands or the [abaco-cli](https://github.com/johnfonner/abaco
 This tutorial gives an overview of registering and running the `abaco-d2s` actor, providing both abaco-cli and cURL commands for each step. Please note that a SD2E token will be needed for both sets of commands. If you choose to use abaco-cli, please ensure you have JQ, getopts, and the [Agave CLI](https://bitbucket.org/agaveapi/cli) installed.
 
 ### 0. Setup
-Get a valid SD2E access token.
+Get and save a valid SD2E access token.
+
 **abaco-cli**
 ```
 $ auth-tokens-create -S
 Token for sd2e:jturcino successfully refreshed and cached for 14400 seconds
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+xxxxxxxxxxxxxxxxxx
 ```
 **cURL**
 ```
-$ TOKEN="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+$ TOKEN="xxxxxxxxxxxxxxxxxx"
 ```
 
 ### 1. Create the actor
 Use `abaco create` or a POST command to create a privileged actor for the Docker container `jturcino/abaco-d2s:0.1.0`. Once done, make note of the actor ID (`WrPZake5ZWmaR`)
+
 **abaco-cli**
 ```
 $ ./abaco create -p -n d2s-tutorial jturcino/abaco-d2s:0.1.0
@@ -66,6 +68,7 @@ $ curl -X POST -sk -H "Authorization: Bearer $TOKEN" -H "Content-Type: applicati
 ```
 ### 2. Check actor's status
 Use `abaco list` or a GET command to check that the actor has `READY` status.
+
 **abaco-cli**
 ```
 $ ./abaco list
@@ -103,6 +106,7 @@ $ curl -sk -H "Authorization: Bearer $TOKEN" https://api.sd2e.org/actors/v2/WrPZ
 
 ### 3. Submit the job
 Use `abaco submit` or a POST command to run the actor once its status is `READY`. The actor will require three inputs, which we pass in as a JSON string: the `container` to transform into a Singularity image, the `system` on which to store the image file, and the `outdir` (filepath) at which to save the image file. Once done, make note of the execution ID (`NNy8LrbNkzpWQ`).
+
 **abaco-cli**
 ```
 $ msg='{"container":"jturcino/docker-whale:latest", "system":"data-tacc-work-jturcino", "outdir":"/projects/docker/sd2e/"}'
@@ -140,6 +144,7 @@ $ curl -sk -H "Authorization: Bearer $TOKEN"  -X POST -H "Content-Type: applicat
 
 ### 4. Check job's status
 Use `abaco executions` or a GET command to check that the job finished. Be sure to provide both the actor ID (`WrPZake5ZWmaR`) and the execution ID (`NNy8LrbNkzpWQ`).
+
 **abaco-cli**
 ```
 $ ./abaco executions -e NNy8LrbNkzpWQ WrPZake5ZWmaR
@@ -189,7 +194,9 @@ $ curl -sk -H "Authorization: Bearer $TOKEN" https://api.sd2e.org/actors/v2/WrPZ
 
 ### 5. Check job's logs
 Use `abaco logs` or a GET command to check that the job ran properly by providing the actor ID and execution ID. If using the GET command, the log will likely be difficult to read. It is recommended to copy and paste the log output into a text editor and replace newline characters (`\n`) with actual newlines.
+
 **abaco-cli**
+```
 $ ./abaco logs -e NNy8LrbNkzpWQ WrPZake5ZWmaR
 Logs for execution NNy8LrbNkzpWQ:
 RUNNING CONTAINER jturcino/docker-whale:latest
