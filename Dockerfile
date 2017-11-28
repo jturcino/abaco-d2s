@@ -17,4 +17,12 @@ ADD d2s-varscript.py /d2s-varscript.py
 ADD requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
+ARG user
+ARG uid
+ARG gid
+
+RUN groupadd -g $gid G-$gid
+RUN useradd --uid $uid --gid G-$gid --home-dir /home/$user --shell /bin/bash $user
+USER $user 
+
 CMD ["python", "/d2s-varscript.py"]
