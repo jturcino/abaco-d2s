@@ -44,9 +44,9 @@ if __name__ == '__main__':
 
     # execute d2s with bash
     print 'RUNNING CONTAINER', container
-    bashcmd = 'bash /docker2singularity.sh {}'.format(container)
-    process = subprocess.Popen(bashcmd.split()).wait()
-    assert int(process) == 0, 'Command finished with non-zero status: '+str(process)
+    d2s_cmd = 'bash /docker2singularity.sh {}'.format(container)
+    process = subprocess.Popen(d2s_cmd.split()).wait()
+    assert int(process) == 0, 'd2s command finished with non-zero status: '+str(process)
 
     # find image file produced
     print '\nFINDING IMG FILE'
@@ -58,6 +58,12 @@ if __name__ == '__main__':
 
     img = '/output/'+str(img_search.group(0))
     print img
+
+    # rmi container
+    print '\nREMOVING CONTAINER'
+    cleanup_cmd = 'bash /cleanup.sh {}'.format(container)
+    process = subprocess.Popen(cleanup_cmd.split()).wait()
+    assert int(process) == 0, 'Cleanup command finished with non-zero status: '+str(process)
 
     # upload img to desired system with agavepy
     print '\nUPLOADING FILE'

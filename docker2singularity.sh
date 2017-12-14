@@ -168,8 +168,7 @@ fi
 
 echo "(8/9) Stopping and removing the container..."
 docker stop -t 0 $container_id
-#docker rm $container_id
-docker rmi -f $container_id
+docker rm $container_id
 
 echo "(9/9) Moving the image to the output folder..."
 rsync --info=progress2 /tmp/$image_name-$creation_date-$container_id.img /output/

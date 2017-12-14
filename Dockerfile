@@ -13,8 +13,11 @@ RUN apk add e2fsprogs bash tar rsync bash python py-pip
 #RUN apk add shadow@community
 #RUN apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/community shadow
 
+# add supplementary scripts
 ADD docker2singularity.sh /docker2singularity.sh
 RUN chmod a+x /docker2singularity.sh
+ADD cleanup.sh /cleanup.sh
+RUN chmod a+x /cleanup.sh
 
 ADD agavepy/ /agavepy/
 ADD d2s-varscript.py /d2s-varscript.py
