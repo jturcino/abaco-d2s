@@ -59,22 +59,6 @@ if __name__ == '__main__':
     img = '/output/'+str(img_search.group(0))
     print img
 
-    # DEBUGGING
-    print '\nDEBUGGING'
-    debugcmds = [ 'date', 'df -h', 'docker ps', 'docker images' ]
-    output = ''
-    for i in debugcmds:
-        p = subprocess.Popen(i.split(), stdout=subprocess.PIPE)
-        output = output+'\n'+p.stdout.read()
-    print output
-
-    debugfile = str(container)+'_diagnostics.txt'
-    with open(debugfile, 'w') as f:
-        f.write(output)
-    movecmd = 'mv '+debugfile+' /work/03761/jturcino/projects/docker/abaco-biocontainers/'
-    process = subprocess.Popen(movecmd.split()).wait()
-    assert int(process) == 0, 'Move command finished with non-zero status: '+str(process)
-
     # upload img to desired system with agavepy
     print '\nUPLOADING FILE'
     print 'System ID: {}'.format(system)
