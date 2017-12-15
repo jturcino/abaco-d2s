@@ -7,11 +7,7 @@ RUN apk add --update automake libtool m4 autoconf alpine-sdk linux-headers && \
     apk del automake libtool m4 autoconf alpine-sdk linux-headers
 
 RUN mkdir -p /usr/local/var/singularity/mnt
-RUN apk add e2fsprogs bash tar rsync bash python py-pip
-
-#ADD repositories /etc/apk/repositories
-#RUN apk add shadow@community
-#RUN apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/community shadow
+RUN apk add e2fsprogs bash tar rsync python py-pip
 
 # add supplementary scripts
 ADD docker2singularity.sh /docker2singularity.sh
@@ -29,9 +25,5 @@ ARG uid=0
 ARG gid=0
 
 RUN if ! [ "$user" == "root" ]; then addgroup -g $gid G-$gid; adduser --uid $uid --gid G-$gid --home-dir /home/$user --shell /bin/bash $user; fi
-
-#RUN groupadd -g $gid G-$gid
-#RUN useradd --uid $uid --gid G-$gid --home-dir /home/$user --shell /bin/bash $user
-USER $user 
 
 CMD ["python", "/d2s-varscript.py"]

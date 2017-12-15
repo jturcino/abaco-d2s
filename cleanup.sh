@@ -9,4 +9,4 @@ container="$1"
 
 # remove container by id
 id="$(docker images -q $container)"
-docker rmi -f $img_id
+docker rmi -f $id

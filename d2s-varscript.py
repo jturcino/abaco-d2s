@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
-import json
-import subprocess
-import sys
-from os import listdir, getcwd
+from subprocess import Popen
+from os import listdir
 from re import search
 from agavepy.actors import get_context, get_client
 
@@ -45,32 +43,33 @@ if __name__ == '__main__':
     # execute d2s with bash
     print 'RUNNING CONTAINER', container
     d2s_cmd = 'bash /docker2singularity.sh {}'.format(container)
-    process = subprocess.Popen(d2s_cmd.split()).wait()
-    assert int(process) == 0, 'd2s command finished with non-zero status: '+str(process)
+    process = Popen(d2s_cmd.split()).wait()
+    assert int(process) == 0, 'd2s command finished with non-zero status: {}'.format(str(process))
 
     # find image file produced
     print '\nFINDING IMG FILE'
     files = ' '.join(listdir('/output'))
-    regex = container.replace('/', '_').replace(':', '_') + '-[0-9]{4}-[0-9]{2}-[0-9]{2}-\w{12}\.img'
-
+    regex = container.replace('/', '_').replace(':', '_')+'-[0-9]{4}-[0-9]{2}-[0-9]{2}-\w{12}\.img'
     img_search = search(regex, files)
-    assert img_search is not None, 'Image for container '+container+' not found in files: '+files
+    assert img_search is not None, 'Image for container {} not found in files: {}'.format(container, files)
 
     img = '/output/'+str(img_search.group(0))
     print img
 
-    # rmi container
-    print '\nREMOVING CONTAINER'
-    cleanup_cmd = 'bash /cleanup.sh {}'.format(container)
-    process = subprocess.Popen(cleanup_cmd.split()).wait()
-    assert int(process) == 0, 'Cleanup command finished with non-zero status: '+str(process)
-
     # upload img to desired system with agavepy
     print '\nUPLOADING FILE'
     print 'System ID: {}'.format(system)
-    print 'Path: {}'.format(outdir)
-    file_upload = ag.files.importData(systemId = system,
-                                      filePath = outdir,
-                                      fileToUpload = open(img))
+    filename = container.split('/')[-1].replace(':', '_')+'.img'
+    print 'Path: {}/{}'.format(outdir, filename)
+    file_upload = ag.files.importData(systemId=system,
+                                      filePath=outdir,
+                                      fileName=filename,
+                                      fileToUpload=open(img))
+
+    # rmi container
+    print '\nREMOVING CONTAINER'
+    cleanup_cmd = 'bash /cleanup.sh {}'.format(container)
+    process = Popen(cleanup_cmd.split()).wait()
+    assert int(process) == 0, 'Cleanup command finished with non-zero status: {}'.format(str(process))
 
     print '\nPROCESS COMPLETE'
