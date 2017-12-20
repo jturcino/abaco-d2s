@@ -39,10 +39,13 @@ if __name__ == '__main__':
 
     # container, agave system, and path to outdir 
     container, system, outdir = get_vars(context)
+    print 'Container: {}'.format(container)
+    print 'System: {}'.format(system)
+    print 'Outdir: {}'.format(outdir)
 
     # execute d2s with bash
-    print 'RUNNING CONTAINER', container
-    d2s_cmd = 'bash /docker2singularity.sh {}'.format(container)
+    print 'CONVERTING DOCKER CONTAINER TO SINGULARITY IMAGE'
+    d2s_cmd = 'sudo bash /docker2singularity.sh {}'.format(container)
     process = Popen(d2s_cmd.split()).wait()
     assert int(process) == 0, 'd2s command finished with non-zero status: {}'.format(str(process))
 
@@ -51,13 +54,12 @@ if __name__ == '__main__':
     files = ' '.join(listdir('/output'))
     regex = container.replace('/', '_').replace(':', '_')+'-[0-9]{4}-[0-9]{2}-[0-9]{2}-\w{12}\.img'
     img_search = search(regex, files)
-    assert img_search is not None, 'Image for container {} not found in files: {}'.format(container, files)
-
+    assert img_search is not None, 'Image for container {} not found in output files: {}'.format(container, files)
     img = '/output/'+str(img_search.group(0))
     print img
 
     # upload img to desired system with agavepy
-    print '\nUPLOADING FILE'
+    print '\nUPLOADING IMAGE TO OUTDIR'
     print 'System ID: {}'.format(system)
     filename = container.split('/')[-1].replace(':', '_')+'.img'
     print 'Path: {}/{}'.format(outdir, filename)
@@ -67,8 +69,8 @@ if __name__ == '__main__':
                                       fileToUpload=open(img))
 
     # rmi container
-    print '\nREMOVING CONTAINER'
-    cleanup_cmd = 'bash /cleanup.sh {}'.format(container)
+    print '\nREMOVING DOCKER CONTAINER'
+    cleanup_cmd = 'sudo bash /cleanup.sh {}'.format(container)
     process = Popen(cleanup_cmd.split()).wait()
     assert int(process) == 0, 'Cleanup command finished with non-zero status: {}'.format(str(process))
 

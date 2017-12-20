@@ -3,7 +3,7 @@
 # get container
 if [ -z "$1" ]; then
     echo "No container name provided for cleanup."
-    exit 0
+    exit 1
 fi
 container="$1"
 
